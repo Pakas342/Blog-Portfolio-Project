@@ -1,3 +1,5 @@
+# TODO Set all the routes
+
 from app.main_blueprint import bp
 from flask import request
 
