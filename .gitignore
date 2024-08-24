@@ -3,4 +3,4 @@
 # Enviromental variables
 .env
 #  Pycache
-__pycache__/
+/__pycache__/
