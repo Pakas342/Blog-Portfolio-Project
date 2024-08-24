@@ -3,6 +3,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
+# TODO configure the already installed flask-jwt-extended for managing user authentication
 
 # Initialize an open instance of SQLAlchemy and Migrate
 
