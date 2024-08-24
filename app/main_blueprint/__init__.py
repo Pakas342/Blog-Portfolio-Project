@@ -1,1 +1,5 @@
-# TODO: Set the bp __init__ file
+from flask import Blueprint
+
+bp = Blueprint("main", __name__)
+
+from app.main_blueprint import routes

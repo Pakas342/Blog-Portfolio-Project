@@ -25,5 +25,13 @@ def create_app(config_class_name: str) -> Flask:
     db.init_app(app)
     migrate.init_app(app, db)
     
+    # Linking a bp to the app
+    from app.main_blueprint import bp as main_bp
+    app.register_blueprint(main_bp)
+    
+    print("Registered routes:")
+    for rule in app.url_map.iter_rules():
+        print(f"{rule.endpoint}: {rule.rule}")
+    
     return app
     
