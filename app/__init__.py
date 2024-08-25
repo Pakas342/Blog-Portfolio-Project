@@ -24,14 +24,12 @@ def create_app(config_class_name: str) -> Flask:
 
     # Calling the models because those are not getting initialized correctly
     from app import models
-    # Linking the instance of the app context 
+
     db.init_app(app)
-    # Linking migrate to the app and db context
     migrate.init_app(app, db)
 
-    # Linking a bp to the app
-    from app.main_blueprint import bp as main_bp
-    app.register_blueprint(main_bp)
+    from app.routes import add_blueprints
+    add_blueprints(app)
     
     # Code for printing the current routes
     # print("Registered routes:")

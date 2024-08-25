@@ -3,6 +3,10 @@ from sqlalchemy import Integer, String, ForeignKey, DateTime
 from typing import List
 from datetime import datetime
 from app.models import db
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .blog_post import BlogPost
 
 class Topic(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -15,3 +19,4 @@ class Topic(db.Model):
 class BlogPostTopic(db.Model):
     blog_post_id: Mapped[int] = mapped_column(ForeignKey('blog_post.id'), primary_key=True)
     topic_id: Mapped[int] = mapped_column(ForeignKey('topic.id'), primary_key=True)
+    

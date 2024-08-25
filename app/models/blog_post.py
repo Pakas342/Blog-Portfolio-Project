@@ -1,8 +1,13 @@
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from sqlalchemy import Integer, String, Text, ForeignKey, DateTime
-from typing import List
+from typing import List, TYPE_CHECKING
 from datetime import datetime
 from app.models import db
+
+if TYPE_CHECKING:
+    from .user import User
+    from .comment import Comment
+    from .topic import Topic
 
 class BlogPost(db.Model):
     __tablename__ = "blog_post"
@@ -16,3 +21,4 @@ class BlogPost(db.Model):
     comments: Mapped[List["Comment"]] = relationship(back_populates="blog")
     priority: Mapped[int] = mapped_column(Integer, default=1)
     topics: Mapped[List["Topic"]] = relationship(secondary="blog_post_topic", back_populates="blog_posts")
+    

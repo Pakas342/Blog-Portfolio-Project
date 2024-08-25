@@ -2,6 +2,11 @@ from sqlalchemy.orm import relationship, Mapped, mapped_column
 from sqlalchemy import Integer, Text, ForeignKey, DateTime
 from datetime import datetime
 from app.models import db
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .user import User
+    from .blog_post import BlogPost
 
 class Comment(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
