@@ -24,6 +24,7 @@ class BlogPost(db.Model):
     author_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
     author: Mapped["User"] = relationship(back_populates="blog_posts")
     comments: Mapped[List["Comment"]] = relationship(back_populates="blog")
+    priority: Mapped[int] = mapped_column(Integer, default=1)
     
 class Comment(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
