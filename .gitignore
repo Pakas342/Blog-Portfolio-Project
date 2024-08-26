@@ -5,3 +5,5 @@
 #  Pycache
 /__pycache__/
 __pycache__/
+# Pycharm .idea
+.idea/
