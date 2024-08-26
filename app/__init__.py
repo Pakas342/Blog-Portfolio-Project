@@ -10,8 +10,9 @@ db = SQLAlchemy()
 migrate = Migrate(render_as_batch=True)
 
 VALID_CONFIG_CLASSES = {
-    "LocalDev" : LocalDevelopmentConfig
+    "LocalDev": LocalDevelopmentConfig
 }
+
 
 def create_app(config_class_name: str) -> Flask:
     if config_class_name not in VALID_CONFIG_CLASSES:
@@ -30,7 +31,7 @@ def create_app(config_class_name: str) -> Flask:
 
     from app.routes import add_blueprints
     add_blueprints(app)
-    
+
     # Code for printing the current routes
     # print("Registered routes:")
     # for rule in app.url_map.iter_rules():

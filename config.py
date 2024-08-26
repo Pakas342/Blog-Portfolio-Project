@@ -6,6 +6,7 @@ load_dotenv()
 
 class Config:
     TESTING = True
+    DEBUG = True
 
 
 class LocalDevelopmentConfig(Config):
