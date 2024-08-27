@@ -8,6 +8,7 @@ from ..utils.functions import create_http_response
 def require_json(f: Callable) -> Callable:
     @wraps(f)
     def decorated_function(*args, **kwargs):
+        print(request)
         if not request.data:
             return create_http_response('Bad request, no data provided', 'failed', 400)
 

@@ -9,7 +9,7 @@ from ..utils.functions import create_http_response
 
 def user_sign_up(request_data: dict) -> jsonify:
     email = request_data.get("email")
-    already_existing_user = db.session.execute(db.select(User).where(User.email == email))
+    already_existing_user = db.session.execute(db.select(User).where(User.email == email)).scalar()
     if already_existing_user:
         return create_http_response('already existing email', 'failed', 409)
     full_name = request_data.get("full_name")
