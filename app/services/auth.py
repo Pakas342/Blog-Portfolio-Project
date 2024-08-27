@@ -35,15 +35,15 @@ def login(request_data: dict) -> jsonify:
     password = request_data.get("password")
     user = db.session.execute(db.select(User).where(User.email == email)).scalar()
     if not user:
-        return create_http_response('LogIn failed', 'failed', 400)
+        return create_http_response('Login failed', 'failed', 400)
 
     if not check_password_hash(user.password, password):
-        return create_http_response('Log In failed', 'failed', 400)
+        return create_http_response('Login failed', 'failed', 400)
     else:
         result = {
             'auth_token': create_auth_token(user)
         }
-        return create_http_response('Log In successful', 'success', 200, result)
+        return create_http_response('Login successful', 'success', 200, result)
 
 
 def create_auth_token(user: User) -> str:
