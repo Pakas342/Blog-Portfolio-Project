@@ -6,6 +6,16 @@ from flask import jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from ..utils.functions import create_http_response
 from ..utils.validations import UserInputsValidation
+from dotenv import load_dotenv
+import os
+from flask_jwt_extended import create_access_token
+from cryptography.fernet import Fernet
+from datetime import timedelta
+
+load_dotenv()
+
+encryption_key = os.getenv("FERNET_KEY")
+fernet = Fernet(encryption_key)
 
 
 def user_sign_up(request_data: dict) -> jsonify:
@@ -30,10 +40,12 @@ def user_sign_up(request_data: dict) -> jsonify:
     db.session.add(new_user)
     db.session.commit()
 
-    result = {
-        'auth_token': create_auth_token(new_user)
-    }
-    return create_http_response('Successfully registered', 'success', 201, result)
+    return create_http_response(
+        message='Successfully registered',
+        status='success',
+        http_status=201,
+        auth_token=create_auth_token(new_user)
+    )
 
 
 def login(request_data: dict) -> jsonify:
@@ -49,11 +61,23 @@ def login(request_data: dict) -> jsonify:
     if not check_password_hash(user.password, password):
         return create_http_response('Invalid email or password', 'failed', 400)
     else:
-        result = {
-            'auth_token': create_auth_token(user)
-        }
-        return create_http_response('Login successful', 'success', 200, result)
+        return create_http_response(
+            message='Login successful',
+            status='success',
+            http_status=200,
+            auth_token=create_auth_token(user)
+        )
 
 
 def create_auth_token(user: User) -> str:
-    return "abcd"
+    identity = user.full_name
+    additional_claims = {'id': user.id}
+    access_token = create_access_token(
+        identity,
+        additional_claims=additional_claims,
+        expires_delta=timedelta(hours=24)
+    )
+
+    return fernet.encrypt(access_token.encode()).decode()
+
+

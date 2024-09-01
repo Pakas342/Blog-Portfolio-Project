@@ -1,7 +1,12 @@
 from flask import jsonify
 
 
-def create_http_response(message: str, status: str, http_status: int, result: dict = None):
+def create_http_response(
+    message: str, status: str,
+        http_status: int,
+        result: dict = None,
+        auth_token: str = None
+                        ) -> tuple:
     if result is None:
         response = {
             'message': message,
@@ -13,4 +18,17 @@ def create_http_response(message: str, status: str, http_status: int, result: di
             'status': status,
             'result': result
         }
-    return jsonify(response), http_status
+
+    resp = jsonify(response)
+
+    if auth_token:
+        resp.set_cookie(
+            'auth_token',
+            auth_token,
+            httponly=True,
+            secure=True,
+            samesite='Lax',
+            max_age=86400
+        )
+
+    return resp, http_status
