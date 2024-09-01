@@ -7,6 +7,11 @@ load_dotenv()
 class Config:
     TESTING = True
     DEBUG = True
+    JWT_SECRET_KEY = os.getenv("JWT_DEV_SECRET")
+    JWT_TOKEN_LOCATION = ['cookies']
+    JWT_COOKIE_SECURE = True
+    JWT_COOKIE_CSRF_PROTECT = True
+    JWT_COOKIE_SAMESITE = 'Lax'
 
 
 class LocalDevelopmentConfig(Config):

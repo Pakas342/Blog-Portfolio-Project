@@ -5,7 +5,7 @@ from ..models import User
 from flask import jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from ..utils.functions import create_http_response
-from  ..utils.validations import UserInputsValidation
+from ..utils.validations import UserInputsValidation
 
 
 def user_sign_up(request_data: dict) -> jsonify:
