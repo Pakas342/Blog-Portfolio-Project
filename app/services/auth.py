@@ -6,16 +6,9 @@ from flask import jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from ..utils.functions import create_http_response
 from ..utils.validations import UserInputsValidation
-from dotenv import load_dotenv
-import os
 from flask_jwt_extended import create_access_token
-from cryptography.fernet import Fernet
 from datetime import timedelta
-
-load_dotenv()
-
-encryption_key = os.getenv("FERNET_KEY")
-fernet = Fernet(encryption_key)
+from ..utils.encryption import Encryption
 
 
 def user_sign_up(request_data: dict) -> jsonify:
@@ -78,6 +71,6 @@ def create_auth_token(user: User) -> str:
         expires_delta=timedelta(hours=24)
     )
 
-    return fernet.encrypt(access_token.encode()).decode()
+    return Encryption.encrypt(access_token)
 
 
