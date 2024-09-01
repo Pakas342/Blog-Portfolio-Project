@@ -4,7 +4,7 @@ from typing import Union
 from .functions import create_http_response
 
 
-class BasicValidation:
+class UserInputsValidation:
 
     @staticmethod
     def email_validation(email: str) -> Union[None, dict]:

@@ -1,17 +1,21 @@
-# TODO Add a module for input validations methods related to a class with the @classmethod decorator create the
-#  create_auth_token function
+# TODO create the create_auth_token function
 
 from app import db
 from ..models import User
 from flask import jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from ..utils.functions import create_http_response
+from  ..utils.validations import UserInputsValidation
 
 
 def user_sign_up(request_data: dict) -> jsonify:
     email = request_data.get("email")
     full_name = request_data.get("full_name")
     unhashed_password = request_data.get("password")
+
+    UserInputsValidation.validate_existence(email, full_name, unhashed_password)
+    UserInputsValidation.email_validation(email)
+    UserInputsValidation.password_validation(unhashed_password)
 
     already_existing_user = db.session.execute(db.select(User).where(User.email == email)).scalar()
     if already_existing_user:
@@ -35,6 +39,9 @@ def user_sign_up(request_data: dict) -> jsonify:
 def login(request_data: dict) -> jsonify:
     email = request_data.get("email")
     password = request_data.get("password")
+    UserInputsValidation.validate_existence(email, password)
+    UserInputsValidation.email_validation(email)
+
     user = db.session.execute(db.select(User).where(User.email == email)).scalar()
     if not user:
         return create_http_response('Invalid email or password', 'failed', 400)
