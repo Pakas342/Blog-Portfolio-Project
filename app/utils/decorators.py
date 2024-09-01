@@ -19,10 +19,6 @@ def require_json(f: Callable) -> Callable:
         except json.JSONDecodeError as e:
             return create_http_response(f'Invalid JSON format: {str(e)}', 'failed', 400)
         except Exception as e:
-            response = {
-                'message': f'An unexpected error occurred: {str(e)}',
-                'status': 'failed',
-            }
             return create_http_response(f'An unexpected error occurred: {str(e)}', 'failed', 500)
 
         return f(*args, **kwargs)

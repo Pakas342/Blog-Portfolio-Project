@@ -1,23 +1,28 @@
 import re
 from typing import Union
-
 from .functions import create_http_response
+from functools import wraps
 
 
-class UserInputsValidation:
+def input_validation(**expected_fields: dict) -> callable:
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(request_data: dict):
+            for field, validations in expected_fields.items():
+                value = request_data.get(field)
 
-    @staticmethod
-    def email_validation(email: str) -> Union[None, tuple]:
-        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-            return create_http_response('Invalid email format', 'failed', 400)
+                if 'required' in validations and not value:
+                    return create_http_response(f'{field} is required', 'failed', 400)
 
-    @staticmethod
-    def password_validation(password: str) -> Union[None, tuple]:
-        if len(password) < 8:
-            return create_http_response('Password must be at least 8 characters long', 'failed', 400)
+                if 'min_length' in validations and len(value) < validations['min_length']:
+                    return create_http_response(f"{field} must be at least {validations['min_length']} characters long",
+                                                'failed',
+                                                400
+                                                )
 
-    @staticmethod
-    def validate_existence(*args: Union[str, int]) -> Union[None, tuple]:
-        for user_input in args:
-            if not user_input:
-                return create_http_response(f'{user_input} is required', 'failed', 400)
+                if 'email' in validations and not re.match(r"[^@]+@[^@]+\.[^@]+", value):
+                    return create_http_response(f'Invalid email format for {field}', 'failed', 400)
+
+            return f(request_data)
+        return decorated_function
+    return decorator

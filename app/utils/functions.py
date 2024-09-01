@@ -2,11 +2,13 @@ from flask import jsonify
 
 
 def create_http_response(
-    message: str, status: str,
-        http_status: int,
-        result: dict = None,
-        auth_token: str = None
-                        ) -> tuple:
+    message: str,
+    status: str,
+    http_status: int,
+    result: dict = None,
+    auth_token: str = None
+) -> tuple:
+
     if result is None:
         response = {
             'message': message,
