@@ -1,4 +1,5 @@
-# TODO Test the routes sign_up y log_in, then, create the create_auth_token function
+# TODO Add a module for input validations methods related to a class with the @classmethod decorator create the
+#  create_auth_token function
 
 from app import db
 from ..models import User
@@ -9,11 +10,12 @@ from ..utils.functions import create_http_response
 
 def user_sign_up(request_data: dict) -> jsonify:
     email = request_data.get("email")
+    full_name = request_data.get("full_name")
+    unhashed_password = request_data.get("password")
+
     already_existing_user = db.session.execute(db.select(User).where(User.email == email)).scalar()
     if already_existing_user:
         return create_http_response('already existing email', 'failed', 409)
-    full_name = request_data.get("full_name")
-    unhashed_password = request_data.get("password")
 
     new_user = User(
         full_name=full_name,
@@ -27,7 +29,7 @@ def user_sign_up(request_data: dict) -> jsonify:
     result = {
         'auth_token': create_auth_token(new_user)
     }
-    return create_http_response('Successfully registered.', 'success', 201, result)
+    return create_http_response('Successfully registered', 'success', 201, result)
 
 
 def login(request_data: dict) -> jsonify:
@@ -35,10 +37,10 @@ def login(request_data: dict) -> jsonify:
     password = request_data.get("password")
     user = db.session.execute(db.select(User).where(User.email == email)).scalar()
     if not user:
-        return create_http_response('Login failed', 'failed', 400)
+        return create_http_response('Invalid email or password', 'failed', 400)
 
     if not check_password_hash(user.password, password):
-        return create_http_response('Login failed', 'failed', 400)
+        return create_http_response('Invalid email or password', 'failed', 400)
     else:
         result = {
             'auth_token': create_auth_token(user)
