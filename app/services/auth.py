@@ -42,7 +42,7 @@ def user_sign_up(request_data: dict) -> jsonify:
 
 @input_validation(
     email={"required": True, "email": True},
-    password={'required': True}
+    password={"required": True}
 )
 def login(request_data: dict) -> jsonify:
     email = request_data.get("email")
