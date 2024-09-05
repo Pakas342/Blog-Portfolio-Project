@@ -31,3 +31,5 @@ def require_json(methods=None):
             return f(*args, **kwargs)
 
         return decorated_function
+
+    return decorator
