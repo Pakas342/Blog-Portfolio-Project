@@ -9,6 +9,7 @@ if TYPE_CHECKING:
     from .comment import Comment
     from .topic import Topic
 
+
 class BlogPost(db.Model):
     __tablename__ = "blog_post"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)

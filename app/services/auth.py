@@ -1,5 +1,4 @@
-from app import db
-from ..models import User
+from ..models import User, db
 from flask import jsonify, request
 from werkzeug.security import generate_password_hash, check_password_hash
 from ..utils.functions import create_http_response
@@ -23,7 +22,7 @@ def user_sign_up(request_data: dict) -> jsonify:
 
     already_existing_user = db.session.execute(db.select(User).where(User.email == email)).scalar()
     if already_existing_user:
-        return create_http_response('already existing email', 'failed', 409)
+        return create_http_response(message='already existing email', status='failed', http_status=409)
 
     new_user = User(
         full_name=full_name,
@@ -51,10 +50,10 @@ def login(request_data: dict) -> jsonify:
     password = request_data.get("password")
     user = db.session.execute(db.select(User).where(User.email == email)).scalar()
     if not user:
-        return create_http_response('Invalid email or password', 'failed', 400)
+        return create_http_response(message='Invalid email or password', status='failed', http_status=400)
 
     if not check_password_hash(user.password, password):
-        return create_http_response('Invalid email or password', 'failed', 400)
+        return create_http_response(message='Invalid email or password', status='failed', http_status=400)
     else:
         return create_http_response(
             message='Login successful',
@@ -81,7 +80,7 @@ def authentication_required(f: callable) -> callable:
     def decorated_function(*args, **kwargs):
         token = request.cookies.get('auth_token')
         if not token:
-            return create_http_response("Unauthorized", "failed", 401)
+            return create_http_response(message="Unauthorized", status="failed", http_status=401)
 
         try:
             decrypted_token = Encryption.decrypt(token)
@@ -90,16 +89,16 @@ def authentication_required(f: callable) -> callable:
             return f(user_id, *args, **kwargs)
 
         except ExpiredSignatureError:
-            return create_http_response("Token has expired", "Auth Failed", 401)
+            return create_http_response(message="Token has expired", status="Auth Failed", http_status=401)
 
         except InvalidTokenError:
-            return create_http_response("Token is invalid", "Auth Failed", 401)
+            return create_http_response(message="Token is invalid", status="Auth Failed", http_status=401)
 
         except Exception as e:
             return create_http_response(
-                f"Auth failed. error: {str(e)}",
-                "Auth Failed",
-                401
+                message=f"Auth failed. error: {str(e)}",
+                status="Auth Failed",
+                http_status=401
             )
 
     return decorated_function()
