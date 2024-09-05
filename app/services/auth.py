@@ -1,12 +1,14 @@
 from app import db
 from ..models import User
-from flask import jsonify
+from flask import jsonify, request
 from werkzeug.security import generate_password_hash, check_password_hash
 from ..utils.functions import create_http_response
 from ..utils.validations import input_validation
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, decode_token
+from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 from datetime import timedelta
 from ..utils.encryption import Encryption
+from functools import wraps
 
 
 @input_validation(
@@ -63,14 +65,42 @@ def login(request_data: dict) -> jsonify:
 
 
 def create_auth_token(user: User) -> str:
-    identity = user.full_name
-    additional_claims = {'id': user.id}
+    identity = user.id
+    additional_claims = {'full_name': user.full_name}
     access_token = create_access_token(
-        identity,
+        identity=identity,
         additional_claims=additional_claims,
         expires_delta=timedelta(hours=24)
     )
 
     return Encryption.encrypt(access_token)
 
+
+def authentication_required(f: callable) -> callable:
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        token = request.cookies.get('auth_token')
+        if not token:
+            return create_http_response("Unauthorized", "failed", 401)
+
+        try:
+            decrypted_token = Encryption.decrypt(token)
+            decoded_token = decode_token(decrypted_token)
+            user_id = decoded_token['identity']
+            return f(user_id, *args, **kwargs)
+
+        except ExpiredSignatureError:
+            return create_http_response("Token has expired", "Auth Failed", 401)
+
+        except InvalidTokenError:
+            return create_http_response("Token is invalid", "Auth Failed", 401)
+
+        except Exception as e:
+            return create_http_response(
+                f"Auth failed. error: {str(e)}",
+                "Auth Failed",
+                401
+            )
+
+    return decorated_function()
 
