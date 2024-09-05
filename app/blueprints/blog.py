@@ -7,10 +7,12 @@ blog_blueprint = Blueprint('blog_blueprint ', __name__)
 
 
 @blog_blueprint.route("/blog", methods=['GET'])
-def get_all_blogs():
+def get_blogs():
     return get_all_blogs()
 
 
-@blog_blueprint.route("/blog/<blog_id: int>", methods=['GET'])
+@blog_blueprint.route("/blog/<int:blog_id>", methods=['GET'])
 def get_blog_data(blog_id: int):
     return get_blog(blog_id)
+
+

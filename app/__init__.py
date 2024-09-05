@@ -4,8 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 
-# TODO configure the already installed flask-jwt-extended for managing user authentication
-
 # Initialize an open instance of SQLAlchemy, Migrate and JWTManager
 db = SQLAlchemy()
 migrate = Migrate(render_as_batch=True)
@@ -35,10 +33,5 @@ def create_app(config_class_name: str) -> Flask:
 
     from app.routes import add_blueprints
     add_blueprints(app)
-
-    # Code for printing the current routes
-    # print("Registered routes:")
-    # for rule in app.url_map.iter_rules():
-    #     print(f"{rule.endpoint}: {rule.rule}")
 
     return app
