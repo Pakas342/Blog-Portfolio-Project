@@ -1,4 +1,6 @@
-from ..models.blog_post import BlogPost, db, User, Topic
+from ..models.blog_post import BlogPost, db
+from ..models.user import User
+from ..models.topic import Topic
 from ..utils.functions import create_http_response
 from flask import jsonify
 from ..utils.validations import input_validation
