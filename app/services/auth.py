@@ -83,6 +83,7 @@ def authentication_required(f: callable) -> callable:
             return create_http_response(message="Unauthorized", status="failed", http_status=401)
 
         try:
+            print(token)
             decrypted_token = Encryption.decrypt(token)
             decoded_token = decode_token(decrypted_token)
             user_id = decoded_token['identity']

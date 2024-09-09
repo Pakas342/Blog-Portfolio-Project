@@ -63,3 +63,7 @@ def create_blog(auth_id: int, request_data: dict) -> jsonify:
         status='success',
         http_status=201
     )
+
+
+def delete_blog(blog_id):
+    pass
