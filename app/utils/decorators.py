@@ -28,6 +28,7 @@ def require_json(methods=None):
                 return create_http_response(message=f'An unexpected error occurred: {str(e)}', status='failed',
                                             http_status=500)
 
+            print(*args, **kwargs)
             return f(*args, **kwargs)
 
         return decorated_function

@@ -9,7 +9,7 @@ blog_blueprint = Blueprint('blog_blueprint ', __name__)
 @require_json(methods=['POST'])
 def get_blogs():
     if request.method == 'POST':
-        return create_blog(request.get_json())
+        return create_blog(request_data=request.get_json())
     return get_all_blogs()
 
 

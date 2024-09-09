@@ -7,7 +7,7 @@ from functools import wraps
 def input_validation(**expected_fields: dict) -> callable:
     def decorator(f):
         @wraps(f)
-        def decorated_function(request_data: dict):
+        def decorated_function(request_data: dict, *args, **kwargs):
             for field, validations in expected_fields.items():
                 value = request_data.get(field)
 
@@ -23,8 +23,7 @@ def input_validation(**expected_fields: dict) -> callable:
 
                 if 'email' in validations and not re.match(r"[^@]+@[^@]+\.[^@]+", value):
                     return create_http_response(message=f'Invalid email format for {field}', status='failed', http_status=400)
-
-            return f(request_data)
+            return f(request_data, *args, **kwargs)
 
         return decorated_function
 
