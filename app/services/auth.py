@@ -100,7 +100,7 @@ def authentication_required(f: callable) -> callable:
                 http_status=401
             )
 
-        return f(user_id, *args, **kwargs)
+        return f(*args, **kwargs, user_id=user_id)
 
     return decorated_function
 
