@@ -28,7 +28,7 @@ def get_blog(blog_id: int):
     title={"required": True, "min_length": 5},
     body={"required": True}
 )
-def create_blog(request_data: dict, user_id: int) -> jsonify:
+def create_blog(request_data: dict, *, user_id: int) -> jsonify:
     title = request_data.get("title")
     body = request_data.get("body")
     priority = request_data.get("priority")
