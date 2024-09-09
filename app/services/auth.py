@@ -64,10 +64,10 @@ def login(request_data: dict) -> jsonify:
 
 
 def create_auth_token(user: User) -> str:
-    identity = user.id
+    subject = user.id
     additional_claims = {'full_name': user.full_name}
     access_token = create_access_token(
-        identity=identity,
+        identity=subject,
         additional_claims=additional_claims,
         expires_delta=timedelta(hours=24)
     )
@@ -83,10 +83,9 @@ def authentication_required(f: callable) -> callable:
             return create_http_response(message="Unauthorized", status="failed", http_status=401)
 
         try:
-            print(token)
             decrypted_token = Encryption.decrypt(token)
             decoded_token = decode_token(decrypted_token)
-            user_id = decoded_token['identity']
+            user_id = decoded_token['sub']
 
         except ExpiredSignatureError:
             return create_http_response(message="Token has expired", status="Auth Failed", http_status=401)
