@@ -86,7 +86,6 @@ def authentication_required(f: callable) -> callable:
             decrypted_token = Encryption.decrypt(token)
             decoded_token = decode_token(decrypted_token)
             user_id = decoded_token['identity']
-            return f(user_id, *args, **kwargs)
 
         except ExpiredSignatureError:
             return create_http_response(message="Token has expired", status="Auth Failed", http_status=401)
@@ -101,5 +100,7 @@ def authentication_required(f: callable) -> callable:
                 http_status=401
             )
 
-    return decorated_function()
+        return f(user_id, *args, **kwargs)
+
+    return decorated_function
 
