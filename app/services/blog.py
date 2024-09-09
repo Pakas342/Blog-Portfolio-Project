@@ -28,7 +28,7 @@ def get_blog(blog_id: int):
     title={"required": True, "min_length": 5},
     body={"required": True}
 )
-def create_blog(auth_id: int, request_data: dict) -> jsonify:
+def create_blog(user_id: int, request_data: dict) -> jsonify:
     title = request_data.get("title")
     body = request_data.get("body")
     priority = request_data.get("priority")
@@ -38,7 +38,7 @@ def create_blog(auth_id: int, request_data: dict) -> jsonify:
     if already_existing_tile:
         return create_http_response(message='already blog with that title', status='failed', http_status=400)
 
-    author = db.session.execute(db.select(User).where(User.id == auth_id)).scalar()
+    author = db.session.execute(db.select(User).where(User.id == user_id)).scalar()
     if not author:
         return create_http_response(message="No user found with that token", status='failed', http_status=401)
 
