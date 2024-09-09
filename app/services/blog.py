@@ -28,7 +28,7 @@ def get_blog(blog_id: int):
     title={"required": True, "min_length": 5},
     body={"required": True}
 )
-def create_blog(user_id: int, request_data: dict) -> jsonify:
+def create_blog(request_data: dict, user_id: int) -> jsonify:
     title = request_data.get("title")
     body = request_data.get("body")
     priority = request_data.get("priority")
@@ -49,11 +49,11 @@ def create_blog(user_id: int, request_data: dict) -> jsonify:
     )
 
     if priority:
-        new_blog['priority'] = priority
+        new_blog.priority = priority
 
     if topic_ids:
         topics = [db.session.execute(db.select(Topic).where(Topic.id == topic_id)).scalar() for topic_id in topic_ids]
-        new_blog['topics'] = topics
+        new_blog.topics = topics
 
     db.session.add(new_blog)
     db.session.commit()
