@@ -3,6 +3,8 @@ from sqlalchemy import Integer, String, Text, ForeignKey, DateTime
 from typing import List, TYPE_CHECKING
 from datetime import datetime
 from app.models import db
+from sqlalchemy_serializer import SerializerMixin
+
 
 if TYPE_CHECKING:
     from .user import User
@@ -10,7 +12,7 @@ if TYPE_CHECKING:
     from .topic import Topic
 
 
-class BlogPost(db.Model):
+class BlogPost(db.Model, SerializerMixin):
     __tablename__ = "blog_post"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     title: Mapped[str] = mapped_column(String(300), nullable=False)
@@ -22,4 +24,23 @@ class BlogPost(db.Model):
     comments: Mapped[List["Comment"]] = relationship(back_populates="blog")
     priority: Mapped[int] = mapped_column(Integer, default=1)
     topics: Mapped[List["Topic"]] = relationship(secondary="blog_post_topic", back_populates="blog_posts")
-    
+
+    serialize_only = ('id', 'title', 'created_at', 'updated_at', 'body', 'author_id', 'priority')
+
+    def to_dict(self, rules=(), **kwargs):
+        data = super().to_dict(rules=rules, **kwargs)
+        data['comments'] = [
+            {
+                'id': comment.id,
+                'body': comment.body,
+                'created_at': comment.created_at,
+                'author_id': comment.author_id
+            } for comment in self.comments
+        ]
+        data['topics'] = [
+            {
+                'id': topic.id,
+                'name': topic.name
+            } for topic in self.topics
+        ]
+        return data

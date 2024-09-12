@@ -18,4 +18,3 @@ class Comment(db.Model):
     blog: Mapped["BlogPost"] = relationship(back_populates="comments")
     author_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
     author: Mapped["User"] = relationship(back_populates="comments")
-    

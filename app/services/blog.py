@@ -17,7 +17,7 @@ def get_all_blogs():
 
 def get_blog(blog_id: int):
     try:
-        blog = db.session.execute(db.select(BlogPost).where(BlogPost.id == blog_id)).scalar
+        blog = db.session.execute(db.select(BlogPost).where(BlogPost.id == blog_id)).scalar().to_dict()
         return create_http_response(result=blog, status="success", http_status=200)
     except Exception as e:
         return create_http_response(message=f"unexpected error: {e}", status="failed", http_status=500)
@@ -65,5 +65,9 @@ def create_blog(request_data: dict, user_id: int = None) -> jsonify:
     )
 
 
-def delete_blog(blog_id):
-    pass
+@authentication_required
+def delete_blog(blog_id, user_id: int = None):
+    blog = db.one_or_404(db.select(BlogPost).filter_by(id=blog_id, author_id=user_id))
+    db.session.delete(blog)
+    db.session.commit()
+    return create_http_response(message='Successfully deleted', status='success', http_status=204)

@@ -4,12 +4,14 @@ from typing import List
 from datetime import datetime
 from app.models import db
 from typing import TYPE_CHECKING
+from sqlalchemy_serializer import SerializerMixin
+
 
 if TYPE_CHECKING:
     from .blog_post import BlogPost
 
 
-class Topic(db.Model):
+class Topic(db.Model, SerializerMixin):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now, onupdate=datetime.now)
@@ -21,3 +23,5 @@ class Topic(db.Model):
 class BlogPostTopic(db.Model):
     blog_post_id: Mapped[int] = mapped_column(ForeignKey('blog_post.id'), primary_key=True)
     topic_id: Mapped[int] = mapped_column(ForeignKey('topic.id'), primary_key=True)
+
+    serialize_only = ('id', 'name')
