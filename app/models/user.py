@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from .comment import Comment
 
 
-class User(db.Model, SerializerMixin):
+class User(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     full_name: Mapped[str] = mapped_column(String(150), nullable=False)
     email: Mapped[str] = mapped_column(String(254), unique=True, nullable=False)
