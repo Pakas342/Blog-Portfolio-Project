@@ -5,6 +5,7 @@ from ..utils.functions import create_http_response
 from flask import jsonify
 from ..utils.validations import input_validation
 from ..services.auth import authentication_required
+from werkzeug.exceptions import NotFound
 
 
 def get_all_blogs():
@@ -67,7 +68,15 @@ def create_blog(request_data: dict, user_id: int = None) -> jsonify:
 
 @authentication_required
 def delete_blog(blog_id, user_id: int = None):
-    blog = db.one_or_404(db.select(BlogPost).filter_by(id=blog_id, author_id=user_id))
-    db.session.delete(blog)
-    db.session.commit()
-    return create_http_response(message='Successfully deleted', status='success', http_status=204)
+    try:
+        blog = db.session.execute(db.select(BlogPost).filter_by(id=blog_id, author_id=user_id)).scalar()
+        if not blog:
+            raise NotFound
+        db.session.delete(blog)
+        db.session.commit()
+        return create_http_response(message='Successfully deleted', status='success', http_status=204)
+    except NotFound:
+        return create_http_response(message=f"Blog id {blog_id} not found", status="failed", http_status=404)
+    except Exception as e:
+        db.session.rollback()
+        return create_http_response(message=f"unexpected error: {e}", status="failed", http_status=500)

@@ -101,9 +101,6 @@ def authentication_required(f: callable) -> callable:
             )
 
         kwargs['user_id'] = user_id
-        print(args)
-        print('Hello')
-        print(kwargs)
         return f(*args, **kwargs)
 
     return decorated_function
