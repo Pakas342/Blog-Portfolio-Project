@@ -4,7 +4,7 @@ from ..services.blog import get_blog, get_all_blogs, create_blog, delete_blog
 
 blog_blueprint = Blueprint('blog_blueprint ', __name__)
 
-
+# Blog routes
 @blog_blueprint.route("/blog", methods=['GET', 'POST'])
 @require_json(methods=['POST'])
 def get_blogs():
