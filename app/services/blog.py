@@ -27,7 +27,8 @@ def get_blog(blog_id: int):
 @authentication_required
 @input_validation(
     title={"required": True, "min_length": 5},
-    body={"required": True}
+    body={"required": True},
+    topics={"array": True}
 )
 def create_blog(request_data: dict, user_id: int = None) -> jsonify:
     title = request_data.get("title")
@@ -64,6 +65,15 @@ def create_blog(request_data: dict, user_id: int = None) -> jsonify:
         status='success',
         http_status=201
     )
+
+
+@authentication_required
+@input_validation(
+    title={"required": True, "min_length": 5},
+    body={"required": True},
+    topics={"array": True}
+)
+def create_blog(request_data: dict, user_id: int = None) -> jsonify:
 
 
 @authentication_required

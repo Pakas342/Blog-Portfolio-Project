@@ -21,8 +21,19 @@ def input_validation(**expected_fields: dict) -> callable:
                         http_status=400
                     )
 
+                if 'array' in validations and value and not isinstance(value, list):
+                    return create_http_response(
+                        message=f'{field} is not an array',
+                        status='failed',
+                        http_status=400
+                    )
+
                 if 'email' in validations and not re.match(r"[^@]+@[^@]+\.[^@]+", value):
-                    return create_http_response(message=f'Invalid email format for {field}', status='failed', http_status=400)
+                    return create_http_response(
+                        message=f'Invalid email format for {field}',
+                        status='failed',
+                        http_status=400
+                    )
             return f(request_data, *args, **kwargs)
 
         return decorated_function
