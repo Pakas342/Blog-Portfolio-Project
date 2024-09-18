@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, Response
 
 
 def create_http_response(
@@ -7,7 +7,7 @@ def create_http_response(
     message: str = None,
     result: dict = None,
     auth_token: str = None
-) -> tuple:
+) -> tuple[Response, int]:
     response = {'status': status}
 
     if message:

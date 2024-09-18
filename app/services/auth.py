@@ -1,5 +1,5 @@
 from ..models import User, db
-from flask import jsonify, request
+from flask import jsonify, request, Response
 from werkzeug.security import generate_password_hash, check_password_hash
 from ..utils.functions import create_http_response
 from ..utils.validations import input_validation
@@ -15,7 +15,7 @@ from functools import wraps
     full_name={"required": True},
     password={'required': True, 'min_length': 8}
 )
-def user_sign_up(request_data: dict) -> jsonify:
+def user_sign_up(request_data: dict) -> tuple[Response, int]:
     email = request_data.get("email")
     full_name = request_data.get("full_name")
     unhashed_password = request_data.get("password")
@@ -45,7 +45,7 @@ def user_sign_up(request_data: dict) -> jsonify:
     email={"required": True, "email": True},
     password={"required": True}
 )
-def login(request_data: dict) -> jsonify:
+def login(request_data: dict) -> tuple[Response, int]:
     email = request_data.get("email")
     password = request_data.get("password")
     user = db.session.execute(db.select(User).where(User.email == email)).scalar()
