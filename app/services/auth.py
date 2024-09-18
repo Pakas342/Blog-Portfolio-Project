@@ -1,5 +1,5 @@
 from ..models import User, db
-from flask import jsonify, request, Response
+from flask import request, Response
 from werkzeug.security import generate_password_hash, check_password_hash
 from ..utils.functions import create_http_response
 from ..utils.validations import input_validation

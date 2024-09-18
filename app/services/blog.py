@@ -2,7 +2,7 @@ from ..models.blog_post import BlogPost, db
 from ..models.user import User
 from ..models.topic import Topic
 from ..utils.functions import create_http_response
-from flask import jsonify, Response
+from flask import Response
 from ..utils.validations import input_validation
 from ..services.auth import authentication_required
 from werkzeug.exceptions import NotFound
@@ -55,6 +55,8 @@ def create_blog(request_data: dict, user_id: int = None) -> tuple[Response, int]
 
     if topic_ids:
         topics = [db.session.execute(db.select(Topic).where(Topic.id == topic_id)).scalar() for topic_id in topic_ids]
+        if None in topics:
+            return create_http_response(message="Topic id not found", status='failed', http_status=404)
         new_blog.topics = topics
 
     db.session.add(new_blog)
