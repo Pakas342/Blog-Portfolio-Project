@@ -18,10 +18,10 @@ class Topic(db.Model, SerializerMixin):
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     blog_posts: Mapped[List["BlogPost"]] = relationship(secondary="blog_post_topic", back_populates="topics")
 
+    serialize_only = ('id', 'name')
+
 
 # join table from Topics and Blog Posts
 class BlogPostTopic(db.Model):
     blog_post_id: Mapped[int] = mapped_column(ForeignKey('blog_post.id'), primary_key=True)
     topic_id: Mapped[int] = mapped_column(ForeignKey('topic.id'), primary_key=True)
-
-    serialize_only = ('id', 'name')
