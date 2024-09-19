@@ -1,12 +1,15 @@
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: dev.dockerfile
     ports:
       - "5000:5000"
     environment:
       - LOCAL_DEV_DB_URI=postgresql://juan_barrera:localdevpass@db:5432/blog_local_dev_db
     depends_on:
       - db
+
 
   db:
     image: postgres:13
