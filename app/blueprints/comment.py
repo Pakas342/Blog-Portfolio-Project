@@ -11,5 +11,5 @@ def comments(blog_id: int):
     if request.method == 'GET':
         return comments_from_blog(blog_id)
     if request.method == 'POST':
-        return create_comment(blog_id)
+        return create_comment(request_data=request.get_json(), blog_id=blog_id)
 
