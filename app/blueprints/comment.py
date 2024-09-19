@@ -14,7 +14,7 @@ def comments(blog_id: int):
         return create_comment(request_data=request.get_json(), blog_id=blog_id)
 
 
-@comment_blueprint.route("comment/<int:comment_id", methods=['PUT', 'DELETE'])
+@comment_blueprint.route("/comment/<int:comment_id", methods=['PUT', 'DELETE'])
 @require_json(methods=['PUT'])
 def comment(comment_id: int):
     if request.method == 'PUT':
