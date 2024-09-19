@@ -1,0 +1,7 @@
+# Virtual Environment
+.venv/
+#  Pycache
+/__pycache__/
+__pycache__/
+# Pycharm .idea
+.idea/
