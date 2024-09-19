@@ -88,7 +88,7 @@ def update_blog(request_data: dict, blog_id: int,  user_id: int = None) -> tuple
         topic_ids = request_data.get("topic_ids")
 
         already_existing_title = db.session.execute(db.select(BlogPost).where(
-            BlogPost.title == title, BlogPost.id != blog_id
+            BlogPost.title == title, BlogPost.id != blog_id, BlogPost.author_id == user_id
         )).scalar()
         if already_existing_title:
             return create_http_response(message='already blog with that title', status='failed', http_status=400)
