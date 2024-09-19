@@ -80,7 +80,7 @@ def update_blog(request_data: dict, blog_id: int,  user_id: int = None) -> tuple
     try:
         blog = db.session.execute(db.select(BlogPost).filter_by(id=blog_id, author_id=user_id)).scalar()
         if not blog:
-            raise NotFound
+            raise NotFound()
 
         title = request_data.get("title")
         body = request_data.get("body")
@@ -133,7 +133,7 @@ def delete_blog(blog_id, user_id: int = None):
     try:
         blog = db.session.execute(db.select(BlogPost).filter_by(id=blog_id, author_id=user_id)).scalar()
         if not blog:
-            raise NotFound
+            raise NotFound()
         db.session.delete(blog)
         db.session.commit()
         return create_http_response(message='Successfully deleted', status='success', http_status=204)
@@ -141,4 +141,17 @@ def delete_blog(blog_id, user_id: int = None):
         return create_http_response(message=f"Blog id {blog_id} not found", status="failed", http_status=404)
     except Exception as e:
         db.session.rollback()
+        return create_http_response(message=f"unexpected error: {e}", status="failed", http_status=500)
+
+
+def get_blogs_by_topic(topic_id: int) -> tuple[Response, int]:
+    try:
+        topic = db.session.execute(db.select(Topic).where(Topic.id == topic_id)).scalar()
+        if not topic:
+            raise NotFound()
+        blogs = db.session.execute(db.select(BlogPost).where(BlogPost.topics.any(Topic.id == topic_id))).scalars().all()
+        return create_http_response(result=blogs, status="success", http_status=200)
+    except NotFound:
+        return create_http_response(message=f"topic id {topic_id} not found", status="failed", http_status=404)
+    except Exception as e:
         return create_http_response(message=f"unexpected error: {e}", status="failed", http_status=500)
