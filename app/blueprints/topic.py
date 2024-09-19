@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from ..utils.decorators import require_json
-from ..services.topic import get_topics
+from ..services.topic import get_topics, create_topic
 
 topic_blueprint = Blueprint('blog_blueprint ', __name__)
 
