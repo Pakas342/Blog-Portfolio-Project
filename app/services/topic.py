@@ -1,6 +1,6 @@
 from ..models.topic import Topic, db
 from ..utils.functions import create_http_response
-from  .auth import authentication_required
+from .auth import authentication_required
 from ..utils.validations import input_validation
 from flask import Response
 
