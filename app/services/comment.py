@@ -15,7 +15,8 @@ def comments_from_blog(blog_id:int) -> tuple[Response, int]:
         return create_http_response(message=f"unexpected error: {e}", status="failed", http_status=500)
 
 
-# @authentication_required
-# def create_comment(blog_id:int, user_id: int = None) -> tuple[Response, int]:
+@authentication_required
+def create_comment(blog_id:int, user_id: int = None) -> tuple[Response, int]:
+    pass
 
 
