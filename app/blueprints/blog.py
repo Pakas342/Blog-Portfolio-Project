@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from ..utils.decorators import require_json
-from ..services.blog import get_blog, get_all_blogs, create_blog, delete_blog, update_blog
+from ..services.blog import get_blog, get_all_blogs, create_blog, delete_blog, update_blog, get_blogs_by_topic
 
 blog_blueprint = Blueprint('blog_blueprint ', __name__)
 
@@ -23,3 +23,7 @@ def get_blog_data(blog_id: int):
     if request.method == 'DELETE':
         return delete_blog(blog_id)
 
+
+@blog_blueprint.route("/blog/topic/<int:topic_id>")
+def get_blogs_data_per_topic(topic_id: int):
+    return get_blogs_by_topic(topic_id)
