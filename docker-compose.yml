@@ -9,6 +9,8 @@ services:
       - LOCAL_DEV_DB_URI=postgresql://juan_barrera:localdevpass@db:5432/blog_local_dev_db
     depends_on:
       - db
+    env_file:
+      - .env
 
 
   db:
