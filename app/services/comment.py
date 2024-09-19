@@ -58,3 +58,22 @@ def update_comment(request_data: dict, comment_id: int, user_id: int = None) -> 
     except Exception as e:
         db.session.rollback()
         return create_http_response(message=f"unexpected error: {e}", status="failed", http_status=500)
+
+
+@authentication_required
+def delete_comment(comment_id, user_id: int = None):
+    try:
+        comment = comment = db.session.execute(db.select(Comment).where(
+            Comment.id == comment_id, Comment.author_id == user_id
+        )).scalar()
+        comment.body = request_data.get('body')
+        if not comment:
+            raise NotFound()
+        db.session.delete(comment)
+        db.session.commit()
+        return create_http_response(message='Successfully deleted', status='success', http_status=204)
+    except NotFound:
+        return create_http_response(message=f"Comment id {comment_id} not found", status="failed", http_status=404)
+    except Exception as e:
+        db.session.rollback()
+        return create_http_response(message=f"unexpected error: {e}", status="failed", http_status=500)

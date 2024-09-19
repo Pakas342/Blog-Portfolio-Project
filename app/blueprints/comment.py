@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from ..utils.decorators import require_json
-from ..services.comment import comments_from_blog, create_comment, update_comment
+from ..services.comment import comments_from_blog, create_comment, update_comment, delete_comment
 
 comment_blueprint = Blueprint('comment_blueprint ', __name__)
 
@@ -19,3 +19,5 @@ def comments(blog_id: int):
 def comment(comment_id: int):
     if request.method == 'PUT':
         return update_comment(request_data=request.get_json(), comment_id=comment_id)
+    if request.method == 'DELETE':
+        return delete_comment(comment_id=comment_id)
