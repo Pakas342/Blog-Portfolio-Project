@@ -8,6 +8,8 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Install any needed packages specified in requirements.txt
+# We do it first because docker CACHE steps that don't change, and if we change the code and that stepo first,
+# then everytime we're going to install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the current directory contents into the container at /app
@@ -20,6 +22,7 @@ EXPOSE 8000
 ENV PYTHONUNBUFFERED=1
 ENV FLASK_APP=run.py
 ENV PORT=8000
+ENV ENV='PROD'
 
 # Run the application
 CMD gunicorn --bind 0.0.0.0:$PORT run:app

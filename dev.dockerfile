@@ -4,10 +4,12 @@ FROM python:3.12
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the requirements file into the container
+# Copy the requirements file into the container.
 COPY requirements.txt .
 
 # Install any needed packages specified in requirements.txt
+# We do it first because docker CACHE steps that don't change, and if we change the code and that stepo first,
+# then everytime we're going to install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the current directory contents into the container at /app
