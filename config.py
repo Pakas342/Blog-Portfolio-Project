@@ -18,3 +18,8 @@ class Config:
 class LocalDevelopmentConfig(Config):
     SECRET_KEY = os.getenv("LOCAL_DEV_SECRET_KEY")
     SQLALCHEMY_DATABASE_URI = os.getenv("LOCAL_DEV_DB_URI")
+
+
+class ProductionConfig(Config):
+    SECRET_KEY = os.getenv("LOCAL_DEV_SECRET_KEY")
+    SQLALCHEMY_DATABASE_URI = os.getenv("LOCAL_DEV_DB_URI")
