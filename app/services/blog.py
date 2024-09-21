@@ -31,6 +31,8 @@ def get_blog(blog_id: int) -> tuple[Response, int]:
     topic_ids={"array": True}
 )
 def create_blog(request_data: dict, user_id: int = None) -> tuple[Response, int]:
+    if user_id != 1:
+        return create_http_response(message="Unauthorized", status='failed', http_status=401)
     title = request_data.get("title")
     body = request_data.get("body")
     priority = request_data.get("priority")

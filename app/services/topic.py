@@ -17,7 +17,9 @@ def get_topics() -> tuple[Response, int]:
 @input_validation(
     name={"required": True, "min_length": 3},
 )
-def create_topic(request_data: dict) -> tuple[Response, int]:
+def create_topic(request_data: dict, user_id: int = None) -> tuple[Response, int]:
+    if user_id != 1:
+        return create_http_response(message="Unauthorized", status='failed', http_status=401)
     name = request_data.get('name')
     already_existing_topic = db.session.execute(db.select(Topic).where(Topic.name == name)).scalar()
     if already_existing_topic:
