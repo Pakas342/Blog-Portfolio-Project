@@ -27,6 +27,9 @@ COPY . .
 ## Run the application
 #CMD ["flask", "run"]
 
+
+
+# Prod version of the server
 # Make port available to the world outside this container
 EXPOSE 8000
 
@@ -37,4 +40,4 @@ ENV PORT=8000
 ENV ENV='PROD'
 
 # Run the application
-CMD gunicorn --bind 0.0.0.0:$PORT run:app
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "run:app"]

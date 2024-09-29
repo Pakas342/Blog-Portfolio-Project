@@ -5,7 +5,7 @@ from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from cors_config import dev_cors_resources, prod_cors_resources
+from .cors_config import dev_cors_resources, prod_cors_resources
 from flask_cors import CORS
 
 # Initialize an open instance of SQLAlchemy, Migrate, JWTManager, and the IP limiter

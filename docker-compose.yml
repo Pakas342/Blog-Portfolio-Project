@@ -7,7 +7,7 @@ services:
       - "8000:8000"
     environment:
       - LOCAL_PROD_DB_URI=postgresql://juan_barrera:localdevpass@db:5432/blog_local_dev_db
-      - LOCAL_DEV_DB_URI=postgresql://juan_barrera:localdevpass@db:5432/blog_local_dev_db
+      - ENV=PROD
     depends_on:
       - db
       - migration
