@@ -15,13 +15,26 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the current directory contents into the container at /app
 COPY . .
 
-# Make port 5000 available to the world outside this container
-EXPOSE 5000
+# Dev version of the server
+## Make port 5000 available to the world outside this container
+#EXPOSE 5000
+#
+## Set environment variables
+#ENV FLASK_APP=run.py
+#ENV FLASK_RUN_HOST=0.0.0.0
+#ENV ENV='DEV'
+#
+## Run the application
+#CMD ["flask", "run"]
+
+# Make port available to the world outside this container
+EXPOSE 8000
 
 # Set environment variables
+ENV PYTHONUNBUFFERED=1
 ENV FLASK_APP=run.py
-ENV FLASK_RUN_HOST=0.0.0.0
-ENV ENV='DEV'
+ENV PORT=8000
+ENV ENV='PROD'
 
 # Run the application
-CMD ["flask", "run"]
+CMD gunicorn --bind 0.0.0.0:$PORT run:app
