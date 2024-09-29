@@ -15,7 +15,7 @@ jwt = JWTManager()
 cors = CORS()
 limiter = Limiter(
     key_func=get_remote_address,
-    default_limits=["200 per day", "50 per hour"]  # Define default limits here
+    default_limits=["100 per day", "20 per hour"]  # Define default limits here
 )
 
 VALID_CONFIG_CLASSES = {
