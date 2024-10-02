@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import os
 
-if os.getenv('ENV') == 'DEV':
+if os.getenv('ENV') == 'DEV' or os.getenv('ENV') == 'PROD':
     load_dotenv()
 
 
