@@ -15,13 +15,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the current directory contents into the container at /app
 COPY . .
 
-## Make port available to the world outside this container (not necesary on gCP)
+## Make port available to the world outside this container (not necesary on gCP run as they open another port)
 #EXPOSE 8000
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 ENV FLASK_APP=run.py
-ENV PORT=8000
+#(not necesary on gCP run as tehy automaticlly do it)
+#ENV PORT=8000
 ENV ENV='PROD'
 
 # Run the application
