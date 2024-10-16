@@ -24,12 +24,12 @@ MarkupSafe==2.1.5
 mdurl==0.1.2
 ordered-set==4.1.0
 packaging==24.1
-pg8000==1.31.2
 psycopg2==2.9.9
 psycopg2-binary==2.9.9
 pycparser==2.22
 Pygments==2.18.0
 PyJWT==2.9.0
+PyMySQL==1.1.1
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 pytz==2024.2
