@@ -22,5 +22,12 @@ class LocalDevelopmentConfig(Config):
 
 class ProductionConfig(Config):
     SECRET_KEY = os.getenv("PROD_SECRET_KEY")
-    SQLALCHEMY_DATABASE_URI = os.getenv("PROD_DB_URL")
     JWT_SECRET_KEY = os.getenv("PROD_JWT_SECRET")
+
+    # Construct the database URL for Google Cloud SQL
+    db_user = os.getenv("DB_USER")
+    db_pass = os.getenv("DB_PASS")
+    db_name = os.getenv("DB_NAME")
+    instance_connection_name = os.getenv("INSTANCE_CONNECTION_NAME")
+
+    SQLALCHEMY_DATABASE_URI = f"postgresql+pg8000://{db_user}:{db_pass}@/{db_name}?unix_sock=/cloudsql/{instance_connection_name}/.s.PGSQL.5432"
