@@ -30,4 +30,4 @@ class ProductionConfig(Config):
     db_name = os.getenv("DB_NAME")
     instance_connection_name = os.getenv("INSTANCE_CONNECTION_NAME")
 
-    SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{db_user}:{db_pass}@/{db_name}?unix_sock=/cloudsql/{instance_connection_name}/.s.PGSQL.3306"
+    SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{db_user}:{db_pass}@/{db_name}?unix_socket=/cloudsql/{instance_connection_name}"
