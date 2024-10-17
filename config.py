@@ -30,4 +30,10 @@ class ProductionConfig(Config):
     db_name = os.getenv("DB_NAME")
     instance_connection_name = os.getenv("INSTANCE_CONNECTION_NAME")
 
-    SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{db_user}:{db_pass}@/{db_name}?unix_socket=/cloudsql/{instance_connection_name}"
+    SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{db_user}:{db_pass}@/{db_name}?unix_socket=/cloudsql/{instance_connection_name}&charset=utf8mb4"
+
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        "pool_pre_ping": True,
+        "pool_recycle": 300,
+        "connect_args": {"charset": "utf8mb4"}
+    }
